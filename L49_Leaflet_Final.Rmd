@@ -67,7 +67,7 @@ We create an object _lf_ which will include all our information on the plot. Fir
 Deaths are marked in red. With increasing death count radius increases. Pumps are marked in green.
 ```{r}
 lf <- leaflet() %>%
-  	addProviderTiles("Stamen.Toner") %>% 
+  	addTiles() %>% 
 	setView(lng = median_location$long, lat = median_location$lat, zoom = 17) %>% 
 	addCircles(lng=deaths$long, 
 		   lat=deaths$lat, 

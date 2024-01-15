@@ -137,7 +137,8 @@ Filter for values for "?" on "thal"-variable, because no information is availabl
 
 ```{r}
 heart_mod <- heart_mod %>% 
-  filter(thal != "?")
+  filter(thal != "?") %>% 
+  tidyr::drop_na()
 ```
 
 

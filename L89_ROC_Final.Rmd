@@ -49,7 +49,7 @@ colnames(df) <- column_names
 df$`education-num` <- NULL
 df$`native-country` <- NULL
 
-df$income <- df$income %>% as.numeric() %>%  -1 %>%  as.factor()
+df$income <- df$income %>% as.factor() %>% as.numeric() %>% -1 %>% as.factor()
 ```
 
 Income is mapped this way: 0...<=50K, 1...>50K.
@@ -108,11 +108,11 @@ rf_pred_1 <- rf_pred[, 2]
 ## Support Vector Machines
 
 ```{r}
-svm_fit <- svm(income ~ ., data = train, probability = T)
-svm_pred <- predict(object = svm_fit, newdata = val, probability = F)
-svm_pred_prob <- predict(object = svm_fit, newdata = val, probability = T) 
-svm_pred_prob_0 <- attr(svm_pred_prob, "probabilities")[, 1]
-svm_pred_prob_1 <- attr(svm_pred_prob, "probabilities")[, 2]
+# svm_fit <- svm(income ~ ., data = train, probability = T)
+# svm_pred <- predict(object = svm_fit, newdata = val, probability = F)
+# svm_pred_prob <- predict(object = svm_fit, newdata = val, probability = T) 
+# svm_pred_prob_0 <- attr(svm_pred_prob, "probabilities")[, 1]
+# svm_pred_prob_1 <- attr(svm_pred_prob, "probabilities")[, 2]
 ```
 
 # Model Evaluation
@@ -186,10 +186,10 @@ roc_df_svm <- data_frame(threshold = seq(0.01, 1, 0.001),
 
 for (thres_pos in 1:nrow(roc_df_svm)) {
   thres <- roc_df_svm$threshold[thres_pos]
-  roc_df_svm$tp[thres_pos] <- sum(as.numeric(svm_pred_prob_1) >= thres & val$income == 1)
-  roc_df_svm$fp[thres_pos] <- sum(as.numeric(svm_pred_prob_1) >= thres & val$income == 0)
-  roc_df_svm$fn[thres_pos] <- sum(as.numeric(svm_pred_prob_1) < thres & val$income == 1)
-  roc_df_svm$tn[thres_pos] <- sum(as.numeric(svm_pred_prob_1) < thres & val$income == 0)
+  # roc_df_svm$tp[thres_pos] <- sum(as.numeric(svm_pred_prob_1) >= thres & val$income == 1)
+  # roc_df_svm$fp[thres_pos] <- sum(as.numeric(svm_pred_prob_1) >= thres & val$income == 0)
+  # roc_df_svm$fn[thres_pos] <- sum(as.numeric(svm_pred_prob_1) < thres & val$income == 1)
+  # roc_df_svm$tn[thres_pos] <- sum(as.numeric(svm_pred_prob_1) < thres & val$income == 0)
 }
 
 roc_df_svm$tpr <- roc_df_svm$tp / (roc_df_svm$fn + roc_df_svm$tp)
@@ -241,7 +241,7 @@ g
 ## AUC
 
 ```{r}
-pROC::auc(as.numeric(val$income), as.numeric(svm_pred))
+# pROC::auc(as.numeric(val$income), as.numeric(svm_pred))
 pROC::auc(as.numeric(val$income), as.numeric(rf_pred_class))
 pROC::auc(as.numeric(val$income), as.numeric(val$income_pred_logreg))
 ```

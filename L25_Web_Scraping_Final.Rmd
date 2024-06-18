@@ -44,20 +44,37 @@ If you in the browser and on the website, just click CTRL + SHIFT + I or right-c
 
 Now you only have to copy the xpath string by _right-clicking_ --> _Copy_ --> _Copy XPath_. This is used within R for accessing the table. This reference can be used in html_node(). At first the complete
 
-```{r download}
-wind <- read_html(url) %>% 
-	html_node(xpath =  '//*[@id="mw-content-text"]/div/table[3]') %>% 
-	html_table(fill = T) %>% 
-  dplyr::select(-`#`)
-```
+
 
 ```{r}
-wind <- read_html("wind.html") 
-wind %>% 
-	html_node(xpath =  "//*[@id='mw-content-text']/div[1]/table[3]") %>% # '//*[@id="mw-content-text"]/div/table[3]') %>% 
-	html_table(fill = T) %>% 
-  dplyr::select(-`#`)
+url <- 'https://en.wikipedia.org/wiki/Wind_power_by_country'
+page <- read_html(url)
 
+# Find the table element containing wind generation data 
+table <- page %>% 
+  html_nodes("table.wikitable.sortable") %>%
+  .[[1]]
+
+# Get the table header
+header <- table %>%
+  html_nodes("th") %>%
+  html_text()
+
+# Get all rows of data from the table
+data <- table %>%
+  html_nodes("tr") %>%
+  .[2:length(.)] %>%
+  html_nodes("td") %>%
+  html_text()
+
+# Reshape data into a data frame
+df <- matrix(data = data, ncol=length(data)/6, nrow = 6) %>% data.frame() %>% t() %>% data.frame()
+  
+# Set column names of the data frame
+colnames(df) <- header
+
+# Print the data frame
+print(df)
 ```
 
 

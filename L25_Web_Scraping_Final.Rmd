@@ -77,25 +77,3 @@ colnames(df) <- header
 print(df)
 ```
 
-
-In a first step the complete url is downloaded. In a second step only the relevant component, identified by xpath, is filtered. Finally, this needs to be converted from HTML to a dataframe. For this _html_table()_ is applied.
-
-Now, a dataframe _wind_ is available for further processing.
-
-```{r table_prep, echo=FALSE}
-for (i in 2:ncol(wind)) {
-	wind[, i] <- gsub(",", "", wind[, i])
-	wind[, i] <- gsub("-", 0, wind[, i])
-	wind[, i] <- as.numeric(as.character(wind[, i]))
-}
-```
-
-# Result
-
-Finally, let's take a look at the table and compare it to the source. It worked perfectly.
-
-```{r table}
-wind %>% 
-  head %>% 
-  kable
-```
